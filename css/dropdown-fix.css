@@ -1,28 +1,45 @@
-/* for a certain sized browser this is going to hide the menu from displaying and only have it display on hover */
-
-    /*.the-default-third-nav .the-nav-cart { float: right;  } */
+@media (min-width:768px) {
 
     /*==============================
         WORKING SUBMENUS
     ================================*/
-    /* header .primary-navigation-bar li.menu-item-has-children { position:relative; } */
-    .navbar .primary-navigation-bar li.menu-item-has-children { position:relative;  }
-
-
+    .navbar .primary-navigation-bar li { position: relative; }
+    .navbar .primary-navigation-bar li.menu-item-has-children { position: relative; }
 
     .navbar .primary-navigation-bar .dropdown-menu {
-        display:none;
-        position:absolute;
-        top:100%;
-        left:0;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
         margin: 0;
         padding: 0;
         z-index: 999;
     }
 
-     .navbar .primary-navigation-bar .dropdown-menu li {	float:none; 	width:200px; }
+    .navbar .primary-navigation-bar .dropdown-menu li {
+        float: none;
+        width: 200px;
+    }
 
-     .navbar .primary-navigation-bar .dropdown-menu .dropdown-menu { top:0; left:100%; }
+    .navbar .primary-navigation-bar .dropdown-menu .dropdown-menu {
+        top: 0;
+        left: 100%;
+    }
 
-    .navbar .primary-navigation-bar li:hover > .dropdown-menu { display: block !important; }
+    .navbar .primary-navigation-bar li:hover > .dropdown-menu {
+        display: block !important;
+    }
 
+}
+@media (max-width:768px) {
+    .dropdown-menu {
+        display: block !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 1.5rem !important;
+    }
+}
+
+.navbar-dark .navbar-nav .dropdown-item {
+    color: rgba(255,255,255,.5);
+}

@@ -135,7 +135,7 @@ if ( ! class_exists( 'WP_Bootstrap_Navwalker' ) ) {
 				// if we are in a dropdown then the the class .dropdown-item
 				// should be used instead of .nav-link.
 				if ( $depth > 0 ) {
-					$atts['class']	= 'dropdown-item';
+					$atts['class']	= 'dropdown-item nav-link';
 				} else {
 					$atts['class']	= 'nav-link';
 				}

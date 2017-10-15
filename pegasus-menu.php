@@ -67,7 +67,7 @@ require_once('class-wp-bootstrap-navwalker.php');
 				//'theme_location'		=> '',
 				//'items_wrap'      => '<ul id="%1$s" class="%2$s nav navbar-nav">%3$s</ul>',
 				//'items_spacing'		=> '',
-
+				'depth'				=> 6,
 				'fallback_cb'		=> 'WP_Bootstrap_Navwalker::fallback',
 				'walker'			=> new WP_Bootstrap_Navwalker()
 			)
@@ -96,7 +96,7 @@ require_once('class-wp-bootstrap-navwalker.php');
 				//'fallback_cb'		=> 'WP_Bootstrap_Navwalker::fallback',
 				//'walker'			=> new WP_Bootstrap_Navwalker()
 
-				//'depth'				=> 2,
+				'depth'				=> 6,
 				//'container'			=> 'div',
 				//'container_class'	=> 'collapse navbar-collapse',
 				//'container_id'		=> 'bs-example-navbar-collapse-1',
@@ -136,47 +136,54 @@ require_once('class-wp-bootstrap-navwalker.php');
 		$pegasus_nav_counter = $pegasus_nav_counter ? $pegasus_nav_counter : 0;
 
 		$overwriteBootstrapStyle = false;
-		$menu_name = "{$a['menu']}" ? "{$a['menu']}" : null;
-		$theme_location = "{$a['theme_location']}" ? "{$a['theme_location']}" : null;
+		$menu_name = "{$a['menu']}" ? "{$a['menu']}" : null; //menu="primary"
+		$theme_location = "{$a['theme_location']}" ? "{$a['theme_location']}" : null; // theme_location="primary"
 		$additional_classes = "{$a['additional_classes']}" ? "{$a['additional_classes']}" : ''; //none, navbar-expand, navbar-expand-sm, navbar-expand-md, navbar-expand-lg, navbar-expand-xl
-		$theme_color = "{$a['theme_color']}" ? "{$a['additional_classes']}" : 'navbar-light'; //navbar-light, navbar-dark
+		$theme_color = "{$a['theme_color']}" ? "{$a['theme_color']}" : 'navbar-light'; //navbar-light, navbar-dark
 		$menu_background = "{$a['theme_background']}" ? "{$a['theme_background']}" : ''; //bg-light, bg-dark, bg-faded, bg-primary
-		$containerChoice = "{$a['container']}" ? "{$a['container']}" : '';
-		$id = "{$a['id']}" ? "{$a['id']}" : '';
+		$containerChoice = "{$a['container']}" ? "{$a['container']}" : ''; //container = "true"
+		$id = "{$a['id']}" ? "{$a['id']}" : ''; //unique ID
 		$positionClass = "{$a['position']}" ? "{$a['position']}" : ''; //fixed-top, fixed-bottom, sticky-top
 
+		// Check if additional classes contains any of the predetermined classes, and if so then overwrite the global setting
 		$pieces = explode( " ", $additional_classes );
 		$nav_check = array( 'none', 'navbar-expand', 'navbar-expand-sm', 'navbar-expand-md', 'navbar-expand-lg', 'navbar-expand-xl' );
-
 		foreach( $pieces as $value ) {
-			if( in_array( $value, $nav_check ) ) {
-				$overwriteBootstrapStyle = true;
-			}
+			if( in_array( $value, $nav_check ) ) { $overwriteBootstrapStyle = true; }
 		}
-
 		$getBootstrapStyleSetting = get_option('select_for_bootstrap_class');
-
 		$outputBootstrapStyle = $overwriteBootstrapStyle ? $additional_classes : $getBootstrapStyleSetting;
-
-		if( true == $overwriteBootstrapStyle ) {
+		if( true === $overwriteBootstrapStyle ) {
 			$outputBootstrapStyle = $additional_classes;
 		}
 
+		//make the ID unique if one isn't set
 		if ( empty( $id ) || '' == $id ) {
 			$id = 'PegasusBootstrap' . $pegasus_nav_counter;
 		}
 
-		if( true == $containerChoice || 'true' == $containerChoice ) {
+		//container choice fixes
+		if( true === $containerChoice || 'true' == $containerChoice ) {
 			$containerChoice = 'container';
-		} else if ( false == $containerChoice ) {
+		} else if ( false === $containerChoice || 'false' == $containerChoice ) {
 			$containerChoice = 'container-fluid';
+		}
+
+		//position fixes
+		if( 'fixed-top' == $positionClass ) {
+			$output .= '<div class="" style="padding-top: 4.5rem;"></div>';
+		}
+		if( 'sticky-top' == $positionClass ) {
+			//$output .= '<div class="" style="padding-top: 9.5rem;"></div>';
+			$positionClass = ''; //don't allow for right now
 		}
 
 		/*===================================
 		 * Start Output
 		 ==================================*/
+
 		$output .= '<nav class="navbar '. $positionClass . ' ' . $outputBootstrapStyle  . ' ' . $theme_color . ' ' . $menu_background . ' ">';
-			$output .= '<div class=" ' . $containerChoice . ' ">';
+			if ( $containerChoice ) { $output .= '<div class=" ' . $containerChoice . ' ">'; }
 				$output .= '<a class="navbar-brand" href="#">Logo</a>';
 
 				$output .= '<button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#' . $id . '" >';
@@ -186,7 +193,7 @@ require_once('class-wp-bootstrap-navwalker.php');
 				$output .= '<div class="navbar-collapse collapse" id="' . $id . '" >';
 					$output .= pegasus_generate_nav_menu( $menu_name, $theme_location );
 				$output .= '</div>';
-			$output .= '</div>';
+			if ( $containerChoice ) { $output .= '</div>'; }
 		$output .= '</nav>';
 
 		/* ============== End ===============*/
@@ -287,6 +294,6 @@ require_once('class-wp-bootstrap-navwalker.php');
 	function pegasus_nav_plugin_js() {
 		//wp_enqueue_script( 'slick-js', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/slick.js', array( 'jquery' ), null, true );
 		//wp_enqueue_script( 'match-height-js', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/matchHeight.js', array( 'jquery' ), null, true );
-		//wp_enqueue_script( 'pegasus-nav-plugin-js', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/plugin.js', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'pegasus-nav-plugin-js', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/plugin.js', array( 'jquery' ), null, true );
 	} //end function
 	add_action( 'wp_enqueue_scripts', 'pegasus_nav_plugin_js' );

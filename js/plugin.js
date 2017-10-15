@@ -14,5 +14,21 @@ jQuery(function($) {
         //$( this ).find("> .dropdown-menu").toggleClass("show").closest("li").removeClass("dropdown");
         //toggleExpand = !toggleExpand;
     //});
+    $('.navbar').each(function( ) {
+        if ( $( this ).hasClass('navbar-dark') ) {
+            $( this ).find('.dropdown-menu').addClass('bg-dark');
+        }
+        if ( $( this ).hasClass('bg-dark') ) {
+            $( this ).find('.dropdown-menu').addClass('bg-dark');
+            $( this ).find('.dropdown-item').hover(function() {
+                $( this ).addClass('bg-dark');
+
+            });
+        }
+    });
+
+
+
+
 
 });
