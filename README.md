@@ -1,4 +1,3 @@
-# pegasus-navmenu
 # Pegasus-navmenu
  
 ## Usage
