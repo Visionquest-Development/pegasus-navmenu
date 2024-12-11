@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 Plugin Name: Pegasus Display Menu Plugin
 Plugin URI:  https://developer.wordpress.org/plugins/the-basics/
@@ -12,18 +12,139 @@ Text Domain: wporg
 Domain Path: /languages
 */
 
+	function pegasus_navmenu_check_main_theme_name() {
+		$current_theme_slug = get_option('stylesheet'); // Slug of the current theme (child theme if used)
+		$parent_theme_slug = get_option('template');    // Slug of the parent theme (if a child theme is used)
 
-/*=================================================================================================
-* Bootstrap Nav Walker from github copied from:
-* https://github.com/wp-bootstrap/wp-bootstrap-navwalker/blob/v4/class-wp-bootstrap-navwalker.php
-* ================================================================================================*/
-require_once('class-wp-bootstrap-navwalker.php');
+		//error_log( "current theme slug: " . $current_theme_slug );
+		//error_log( "parent theme slug: " . $parent_theme_slug );
+
+		if ( $current_theme_slug == 'pegasus' ) {
+			return 'Pegasus';
+		} elseif ( $current_theme_slug == 'pegasus-child' ) {
+			return 'Pegasus Child';
+		} else {
+			return 'Not Pegasus';
+		}
+	}
+
+	function pegasus_navmenu_menu_item() {
+		if ( pegasus_navmenu_check_main_theme_name() == 'Pegasus' || pegasus_navmenu_check_main_theme_name() == 'Pegasus Child' ) {
+			//do nothing
+		} else {
+			//echo 'This is NOT the Pegasus theme';
+			add_menu_page(
+				"Pegasus Navmenu", // Page title
+				"Navmenu", // Menu title
+				"manage_options", // Capability
+				"pegasus_navmenu_plugin_options", // Menu slug
+				"pegasus_navmenu_plugin_settings_page", // Callback function
+				null, // Icon
+				86 // Position in menu
+			);
+
+			add_submenu_page(
+				"pegasus_navmenu_plugin_options", //parent slug
+				"Shortcode Usage", // Menu title
+				"Usage", // Menu title
+				"manage_options", // Capability
+				"pegasus_nav_plugin_shortcode_options", // Menu slug
+				"pegasus_nav_plugin_shortcode_settings_page" // Callback function
+			);
+		}
+	}
+	add_action("admin_menu", "pegasus_navmenu_menu_item");
+
+	function pegasus_nav_plugin_shortcode_settings_page() { ?>
+		<div class="wrap pegasus-wrap">
+			<h1>Pegasus Navmenu Usage</h1>
+
+			<div>
+				<h3>Pegasus Navmenu Usage 1:</h3>
+				<style>
+					pre {
+						background-color: #f9f9f9;
+						border: 1px solid #aaa;
+						page-break-inside: avoid;
+						font-family: monospace;
+						font-size: 15px;
+						line-height: 1.6;
+						margin-bottom: 1.6em;
+						max-width: 100%;
+						overflow: auto;
+						padding: 1em 1.5em;
+						display: block;
+						word-wrap: break-word;
+					}
+
+					input[type="text"].code {
+						width: 100%;
+					}
+				</style>
+				<pre >[menu menu="primary"]</pre>
+
+				<input
+					type="text"
+					readonly
+					value="<?php echo esc_html('[menu menu="primary"]'); ?>"
+					class="regular-text code"
+					id="my-shortcode"
+					onClick="this.select();"
+				>
+			</div>
+
+			<div>
+				<h3>Pegasus Navmenu Usage 2:</h3>
+				<style>
+					pre {
+						background-color: #f9f9f9;
+						border: 1px solid #aaa;
+						page-break-inside: avoid;
+						font-family: monospace;
+						font-size: 15px;
+						line-height: 1.6;
+						margin-bottom: 1.6em;
+						max-width: 100%;
+						overflow: auto;
+						padding: 1em 1.5em;
+						display: block;
+						word-wrap: break-word;
+					}
+
+					input[type="text"].code {
+						width: 100%;
+					}
+				</style>
+				<pre >[bootstrap_menu menu="primary" additional_classes="navbar-expand"]</pre>
+
+				<input
+					type="text"
+					readonly
+					value="<?php echo esc_html('[bootstrap_menu menu="primary" additional_classes="navbar-expand"]'); ?>"
+					class="regular-text code"
+					id="my-shortcode"
+					onClick="this.select();"
+				>
+			</div>
+
+			<p style="color:red;">MAKE SURE YOU DO NOT HAVE ANY RETURNS OR <?php echo htmlspecialchars('<br>'); ?>'s IN YOUR SHORTCODES, OTHERWISE IT WILL NOT WORK CORRECTLY</p>
+
+		</div>
+	<?php
+	}
+
+
+	/*=================================================================================================
+	* Bootstrap Nav Walker from github copied from:
+	* https://github.com/wp-bootstrap/wp-bootstrap-navwalker/blob/v4/class-wp-bootstrap-navwalker.php
+	* ================================================================================================*/
+	require_once('class-wp-bootstrap-navwalker.php');
 
 
 	/*~~~~~~~~~~~~~~~~~~~~
 		DISPLAY MENU
 	~~~~~~~~~~~~~~~~~~~~~*/
-	
+
 	function pegasus_menu_function($atts, $content = null) {
 	   extract(
 		  shortcode_atts(
@@ -205,13 +326,13 @@ require_once('class-wp-bootstrap-navwalker.php');
 
 
 
-	function pegasus_nav_menu_item() {
-		add_menu_page("Nav", "Nav", "manage_options", "pegasus_nav_plugin_options", "pegasus_nav_plugin_settings_page", null, 99);
-		add_submenu_page("pegasus_nav_plugin_options", "Shortcode Usage", "Usage", "manage_options", "pegasus_nav_plugin_shortcode_options", "pegasus_nav_plugin_shortcode_settings_page" );
-	}
-	add_action("admin_menu", "pegasus_nav_menu_item");
+	// function pegasus_nav_menu_item() {
+	// 	add_menu_page("Nav", "Nav", "manage_options", "pegasus_nav_plugin_options", "pegasus_nav_plugin_settings_page", null, 99);
+	// 	add_submenu_page("pegasus_nav_plugin_options", "Shortcode Usage", "Usage", "manage_options", "pegasus_nav_plugin_shortcode_options", "pegasus_nav_plugin_shortcode_settings_page" );
+	// }
+	// add_action("admin_menu", "pegasus_nav_menu_item");
 
-	function pegasus_nav_plugin_settings_page() { ?>
+	function pegasus_navmenu_plugin_settings_page() { ?>
 		<div class="wrap">
 			<h1>Nav</h1>
 
@@ -239,7 +360,7 @@ require_once('class-wp-bootstrap-navwalker.php');
 		<?php
 	}
 
-	function pegasus_nav_plugin_shortcode_settings_page() { ?>
+	/* function pegasus_nav_plugin_shortcode_settings_page() { ?>
 		<div class="wrap pegasus-wrap">
 			<h1>Shortcode Usage</h1>
 
@@ -252,7 +373,7 @@ require_once('class-wp-bootstrap-navwalker.php');
 
 		</div>
 		<?php
-	}
+	} */
 
 	function pegasus_select_bootstrap_style_option() { ?>
 
