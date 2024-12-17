@@ -1,0 +1,16 @@
+{
+  "rows": [
+    {
+      "section_name": "Nav Menu Settings",
+      "rows": [
+        {
+          "name": "Menu",
+          "attribute": "menu",
+          "options": "Primary, User, Footer",
+          "description": "The Theme Location or Theme name of the menu to display.",
+          "example": "menu=\"primary\""
+        }
+      ]
+    }
+  ]
+}
