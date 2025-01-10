@@ -493,6 +493,6 @@ Domain Path: /languages
 	function pegasus_nav_plugin_js() {
 		//wp_enqueue_script( 'slick-js', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/slick.js', array( 'jquery' ), null, true );
 		//wp_enqueue_script( 'match-height-js', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/matchHeight.js', array( 'jquery' ), null, true );
-		wp_enqueue_script( 'pegasus-nav-plugin-js', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/plugin.js', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'pegasus-nav-plugin', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'js/pegasus-navmenu-plugin.js', array( 'jquery' ), null, true );
 	} //end function
 	add_action( 'wp_enqueue_scripts', 'pegasus_nav_plugin_js' );
