@@ -483,7 +483,7 @@ Domain Path: /languages
 
 	function pegasus_nav_plugin_styles() {
 		//wp_enqueue_style( 'slick-css', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'css/slick.css', array(), null, 'all' );
-		wp_enqueue_style( 'pageasus-boostrap-dropdownfix-css', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'css/dropdown-fix.css', array(), null, 'all' );
+		//wp_enqueue_style( 'pageasus-boostrap-dropdownfix-css', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'css/dropdown-fix.css', array(), null, 'all' );
 	}
 	add_action( 'wp_enqueue_scripts', 'pegasus_nav_plugin_styles' );
 
